@@ -151,10 +151,10 @@ public class Player_Controller : MonoBehaviour
             animator.SetBool("runShooting", true);
         }
 
-        //if (Input.GetKey(KeyCode.Z) && movement.x != 0)
-        //{
-        //    animator.SetBool("shooting", false);
-        //}
+        if (Input.GetKey(KeyCode.Z) && movement.x != 0)
+        {
+            animator.SetBool("shooting", false);
+        }
 
         if (Input.GetKeyUp(KeyCode.Z))
         {
