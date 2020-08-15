@@ -9,6 +9,7 @@ public class Player_Controller : MonoBehaviour
 {
     Rigidbody2D rb;
     [SerializeField] Animator animator;
+    
 
 
     // ---- MOVEMENT Variables ----
@@ -45,6 +46,12 @@ public class Player_Controller : MonoBehaviour
     public float shootTime;
     private float ShootTimeCounter;
 
+    // ---- UI Variables ----
+
+    public Health_Bar healthBar;
+    [SerializeField] int maxHealth;
+    public int currentHealth;
+
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
     void Start()
@@ -53,6 +60,8 @@ public class Player_Controller : MonoBehaviour
         extraJump = extraJumpsValue;
         canDash = true;
         ShootTimeCounter = shootTime;
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -176,6 +185,15 @@ public class Player_Controller : MonoBehaviour
         }
 
         // ---- End Animation Controller ----
+
+        // ---- HEALTH Controller ----
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            TakeDamage(20);
+        }
+
+        // ---- End HEALTH Controller ----
     }
 
     void FixedUpdate()
@@ -244,6 +262,12 @@ public class Player_Controller : MonoBehaviour
         canDash = true;
     }
 
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        healthBar.SetHealth(currentHealth);
+    }
     
 
 }
