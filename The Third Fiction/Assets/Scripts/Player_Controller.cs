@@ -52,6 +52,10 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] int maxHealth;
     public int currentHealth;
 
+    // ---- Check Point Variables ----
+    public Vector3 respawnPoint;
+
+
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
     void Start()
@@ -268,6 +272,21 @@ public class Player_Controller : MonoBehaviour
 
         healthBar.SetHealth(currentHealth);
     }
-    
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Checkpoint")
+        {
+            respawnPoint = other.transform.position;
+        }
+        if (other.tag == "FallHazard")
+        {
+            transform.position = respawnPoint;
+            TakeDamage(30);
+        }
+    }
+
+
+
 
 }

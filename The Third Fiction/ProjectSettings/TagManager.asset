@@ -9,6 +9,8 @@ TagManager:
   - Enemie
   - Wall
   - Bullet
+  - Checkpoint
+  - FallHazard
   layers:
   - Default
   - TransparentFX
