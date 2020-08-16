@@ -36,6 +36,8 @@ public class Player_Controller : MonoBehaviour
     public int extraJumpsValue;
     public float secondJumpForce;
 
+    private bool hasDoubleJump;
+
     // ---- DASH Variables ----
 
     [SerializeField] float dashForce;
@@ -66,6 +68,7 @@ public class Player_Controller : MonoBehaviour
         ShootTimeCounter = shootTime;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        hasDoubleJump = false;
     }
 
     // Update is called once per frame
@@ -82,7 +85,7 @@ public class Player_Controller : MonoBehaviour
             rb.velocity = Vector2.up * jumpForce;
 
         }
-        else if (Input.GetButtonDown("Jump") && extraJump > 0) // Aqui se hace el doble salto.
+        else if (Input.GetButtonDown("Jump") && extraJump > 0 && hasDoubleJump == true ) // Aqui se hace el doble salto.
         {
             rb.velocity = Vector2.up * secondJumpForce;
             animator.SetBool("jumping", true);
@@ -283,6 +286,11 @@ public class Player_Controller : MonoBehaviour
         {
             transform.position = respawnPoint;
             TakeDamage(30);
+        }
+        if (other.tag == "PowerUpJump" )
+        {
+            hasDoubleJump = true;
+            Destroy(other.gameObject);
         }
     }
 
