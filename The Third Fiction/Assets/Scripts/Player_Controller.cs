@@ -53,6 +53,10 @@ public class Player_Controller : MonoBehaviour
     public Health_Bar healthBar;
     [SerializeField] int maxHealth;
     public int currentHealth;
+    public Xp_Bar xpBar;
+    public int currentXp;
+    public int xpToNextLevel;
+    public int level;
 
     // ---- Check Point Variables ----
     public Vector3 respawnPoint;
@@ -68,6 +72,8 @@ public class Player_Controller : MonoBehaviour
         ShootTimeCounter = shootTime;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        xpBar.SetXp(currentXp);
+        xpBar.slider.maxValue = xpToNextLevel;
         hasDoubleJump = false;
     }
 
@@ -201,6 +207,20 @@ public class Player_Controller : MonoBehaviour
         }
 
         // ---- End HEALTH Controller ----
+
+        // ---- XP Controller ----
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            gainXp(10);
+        }
+        if (currentXp >= xpToNextLevel)
+        {
+            level++;
+            currentXp -= currentXp + 10;
+        }
+
+
+        // ---- End XP Controller ----
     }
 
     void FixedUpdate()
@@ -274,6 +294,13 @@ public class Player_Controller : MonoBehaviour
         currentHealth -= damage;
 
         healthBar.SetHealth(currentHealth);
+    }
+
+    void gainXp(int gainedXp)
+    {
+        currentXp += gainedXp;
+
+        xpBar.SetXp(currentXp);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

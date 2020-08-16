@@ -8,7 +8,7 @@ public class Xp_Bar : MonoBehaviour
 
     public Slider slider;
 
-    public void setXp(int xp)
+    public void SetXp(int xp)
     {
         slider.value = xp;
     }
