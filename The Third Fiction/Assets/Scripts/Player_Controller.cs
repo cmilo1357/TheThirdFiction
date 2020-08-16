@@ -56,6 +56,7 @@ public class Player_Controller : MonoBehaviour
     public Xp_Bar xpBar;
     public int currentXp;
     public int xpToNextLevel;
+    public Level_Manager lvlManager;
     public int level;
 
     // ---- Check Point Variables ----
@@ -74,6 +75,7 @@ public class Player_Controller : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
         xpBar.SetXp(currentXp);
         xpBar.slider.maxValue = xpToNextLevel;
+        lvlManager.SetLevel(level);
         hasDoubleJump = false;
     }
 
@@ -91,7 +93,7 @@ public class Player_Controller : MonoBehaviour
             rb.velocity = Vector2.up * jumpForce;
 
         }
-        else if (Input.GetButtonDown("Jump") && extraJump > 0 && hasDoubleJump == true ) // Aqui se hace el doble salto.
+        else if (Input.GetButtonDown("Jump") && extraJump > 0 && hasDoubleJump == true) // Aqui se hace el doble salto.
         {
             rb.velocity = Vector2.up * secondJumpForce;
             animator.SetBool("jumping", true);
@@ -126,6 +128,11 @@ public class Player_Controller : MonoBehaviour
         else
         {
             animator.SetBool("jumping", true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.O)) // ----> testeo de power up de doble salto.
+        {
+            hasDoubleJump = true;
         }
 
         // ---- End JUMP Controller ----
@@ -208,19 +215,20 @@ public class Player_Controller : MonoBehaviour
 
         // ---- End HEALTH Controller ----
 
-        // ---- XP Controller ----
-        if (Input.GetKeyDown(KeyCode.I))
+        // ---- XP and Lvl Controller ----
+        if (Input.GetKeyDown(KeyCode.I)) // ----> testeo del sitema de xp y nivel.
         {
             gainXp(10);
         }
         if (currentXp >= xpToNextLevel)
         {
             level++;
+            lvlManager.SetLevel(level);
             currentXp -= currentXp + 10;
         }
 
 
-        // ---- End XP Controller ----
+        // ---- End XP and Lvl Controller ----
     }
 
     void FixedUpdate()
