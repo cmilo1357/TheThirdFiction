@@ -36,6 +36,8 @@ public class Player_Controller : MonoBehaviour
     public int extraJumpsValue;
     public float secondJumpForce;
 
+    private bool hasDoubleJump;
+
     // ---- DASH Variables ----
 
     [SerializeField] float dashForce;
@@ -51,11 +53,16 @@ public class Player_Controller : MonoBehaviour
     public Health_Bar healthBar;
     [SerializeField] int maxHealth;
     public int currentHealth;
+    public Xp_Bar xpBar;
+    public int currentXp;
+    public int level;
+    public int xpToNextLvl;
+    public Level_Manager levelManager;
 
     // ---- Check Point Variables ----
     public Vector3 respawnPoint;
 
-
+ 
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
     void Start()
@@ -66,6 +73,8 @@ public class Player_Controller : MonoBehaviour
         ShootTimeCounter = shootTime;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        xpBar.setXp(currentXp);
+        hasDoubleJump = false;
     }
 
     // Update is called once per frame
@@ -82,7 +91,7 @@ public class Player_Controller : MonoBehaviour
             rb.velocity = Vector2.up * jumpForce;
 
         }
-        else if (Input.GetButtonDown("Jump") && extraJump > 0) // Aqui se hace el doble salto.
+        else if (Input.GetButtonDown("Jump") && extraJump > 0 && hasDoubleJump == true) // Aqui se hace el doble salto.
         {
             rb.velocity = Vector2.up * secondJumpForce;
             animator.SetBool("jumping", true);
@@ -117,6 +126,11 @@ public class Player_Controller : MonoBehaviour
         else
         {
             animator.SetBool("jumping", true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.O)) // Sólo se usa para testeo de Obtener el Doble Salto.
+        {
+            hasDoubleJump = true;
         }
 
         // ---- End JUMP Controller ----
@@ -192,12 +206,28 @@ public class Player_Controller : MonoBehaviour
 
         // ---- HEALTH Controller ----
 
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.U)) // Solo se usa para testear el sistema de daño que recibe el jugador.
         {
             TakeDamage(20);
         }
 
         // ---- End HEALTH Controller ----
+
+        // ---- XP Controller ----
+
+        if (Input.GetKeyDown(KeyCode.I)) // Solo se usa para testear el comportamineto del sistema de experiencia.
+        {
+            GainXp(10);
+        }
+
+        if (currentXp >= xpToNextLvl)
+        {
+            level++;
+            levelManager.changeLevel(level);
+            currentXp -= currentXp + 10;
+        }
+
+        // ---- End XP Controller ----
     }
 
     void FixedUpdate()
@@ -284,9 +314,17 @@ public class Player_Controller : MonoBehaviour
             transform.position = respawnPoint;
             TakeDamage(30);
         }
+        if (other.tag == "PowerUpJump")
+        {
+            hasDoubleJump = true;
+            Destroy(other.gameObject);
+        }
     }
 
 
-
-
+    void GainXp(int gainedXp)
+    {
+        currentXp += gainedXp;
+        xpBar.setXp(currentXp);
+    }
 }
