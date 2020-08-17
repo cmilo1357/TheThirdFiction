@@ -29,7 +29,7 @@ public class kaia_Bullet : MonoBehaviour
         }
         else if (hit.gameObject.CompareTag("Enemie"))
         {
-            hit.GetComponent<DestroyObject>().TakeDamage(Damage);
+            hit.GetComponent<Enemy_HPManager>().TakeDamage(Damage);
             Destroy(gameObject);
         }
     }

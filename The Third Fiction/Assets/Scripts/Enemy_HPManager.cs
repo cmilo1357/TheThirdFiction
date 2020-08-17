@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DestroyObject : MonoBehaviour
+public class Enemy_HPManager : MonoBehaviour
 {
     // Variables del Enemigo
     public Animator anim;
+    public Enemy_UIManager Enemy_UI;
     public GameObject Object;
     public int Health;
     public int MaxHealth;
@@ -15,6 +16,7 @@ public class DestroyObject : MonoBehaviour
     void Awake()
     {
         anim = GetComponent<Animator>();
+        Enemy_UI = GetComponent<Enemy_UIManager>();
     }
 
     //Activar la animacion cuando la Vida llega a 0
@@ -36,5 +38,6 @@ public class DestroyObject : MonoBehaviour
     public void TakeDamage(int Damage)
     {
         Health -= Damage;
+        Enemy_UI.HP_Update();
     }
 }

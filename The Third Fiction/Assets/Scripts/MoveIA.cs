@@ -42,10 +42,12 @@ public class MoveIA : MonoBehaviour
         if (x >= 0)
         {
             transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+            transform.GetChild(0).GetChild(0).localScale = new Vector3(0.005f, 0.005f, 1);
         }
         else
         {
             transform.GetChild(0).localScale = new Vector3(-1, 1, 1);
+            transform.GetChild(0).GetChild(0).localScale = new Vector3(-0.005f, 0.005f, 1);
         }
     }
 
