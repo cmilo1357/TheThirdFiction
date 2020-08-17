@@ -6,6 +6,8 @@ public class Player_Controller2 : MonoBehaviour
 {
     Rigidbody2D rb;
     [SerializeField] Animator animator;
+    private int state; //Enables Move, Jump, etc. Depending on the situation
+    
 
 
 
@@ -41,12 +43,12 @@ public class Player_Controller2 : MonoBehaviour
     // ---- SHOOT Variables ---
 
     public float shootTime;
-    private float ShootTimeCounter;
+    public float ShootTimeCounter;
     [SerializeField]Collider2D collider;
 
     // ---- UI Variables ----
 
-    public Health_Bar healthBar;
+    //public Health_Bar healthBar;
     [SerializeField] int maxHealth;
     public int currentHealth;
 
@@ -63,8 +65,9 @@ public class Player_Controller2 : MonoBehaviour
         canDash = true;
         ShootTimeCounter = shootTime;
         currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
+        //healthBar.SetMaxHealth(maxHealth);
         collider.enabled = false;
+        state = 0;
     }
 
     // Update is called once per frame
@@ -72,6 +75,100 @@ public class Player_Controller2 : MonoBehaviour
     {
         // ---- JUMP Controller ----
 
+        switch (state)
+        {
+            case 0: //Idle, Moving
+                Jump();
+                Movement();
+                Dash();
+                Attack();
+                break;
+            case 1: //Attacking
+                Attack();
+                ShootTimeCounter -= Time.deltaTime;
+                break;
+        }
+
+        // ---- End JUMP Controller ----
+
+        // ---- DASH Controller----
+
+
+
+
+
+        // ---- End DASH Controller ----
+
+        // ---- ANIMATION Controller ----  *P.S -> No todas las animaciones estan áca, algunas estan con sus respectivos controladores.
+
+        // -> Shooting
+
+        
+
+        // ---- End Animation Controller ----
+
+        // ---- HEALTH Controller ----
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            TakeDamage(20);
+        }
+
+        // ---- End HEALTH Controller ----
+    }
+
+    void FixedUpdate()
+    {
+        // -------------------------- Movement by Physics--------------------
+        //moveInput = Input.GetAxis("Horizontal");
+        //rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        //animator.SetFloat("speed", Math.Abs(moveInput));
+
+        //if (facingRight == false && moveInput > 0)
+        //{
+        //    flipSprite();
+        //}
+        //else if (facingRight == true && moveInput < 0)
+        //{
+        //    flipSprite();
+        //}
+
+        // -------------------------- Movement by Transform
+       
+
+
+    }
+
+    //void flipSprite() // Alternative function for Flip
+    //{
+    //    facingRight = !facingRight;
+
+    //    Vector3 scaler = transform.localScale;
+    //    scaler.x *= -1;
+    //    transform.localScale = scaler;
+    //}
+
+    public void Movement() //Movement controller by transform
+    {
+        moveInput = Input.GetAxis("Horizontal");
+        movement = new Vector3(moveInput, 0f, 0f);
+        transform.position += movement * Time.deltaTime * speed;
+        animator.SetFloat("speed", Mathf.Abs(moveInput));
+
+        if (movement.x < 0 && !faceingright)
+        {
+            flip();
+
+        }
+        else if (movement.x > 0 && faceingright)
+        {
+            flip();
+        }
+    }
+    
+    public void Jump() //Jump Controller (Deactivated when attacking)
+   
+    {
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRaious, whatGround);
 
         if (isGrounded == true && Input.GetButtonDown("Jump") && extraJump > 0)
@@ -117,12 +214,10 @@ public class Player_Controller2 : MonoBehaviour
         {
             animator.SetBool("jumping", true);
         }
+    }
 
-        // ---- End JUMP Controller ----
-
-        // ---- DASH Controller----
-
-
+    public void Dash() //Dash Controller (Deactivated when attacking)
+    {
         if (!faceingright && Input.GetKeyDown(KeyCode.X))
         {
 
@@ -145,103 +240,7 @@ public class Player_Controller2 : MonoBehaviour
                 Invoke("cooldownDash", 2);
             }
         }
-
-
-        // ---- End DASH Controller ----
-
-        // ---- ANIMATION Controller ----  *P.S -> No todas las animaciones estan áca, algunas estan con sus respectivos controladores.
-
-        // -> Shooting
-
-        if (Input.GetKeyDown(KeyCode.Z) && moveInput == 0)
-        {
-            animator.SetBool("shooting", true);
-        }
-        else if (Input.GetKeyDown(KeyCode.Z) && moveInput != 0)
-        {
-            ShootTimeCounter = shootTime;
-            animator.SetBool("runShooting", true);
-        }
-
-        if (Input.GetKey(KeyCode.Z) && movement.x != 0)
-        {
-            animator.SetBool("shooting", false);
-        }
-
-        if (Input.GetKeyUp(KeyCode.Z))
-        {
-            animator.SetBool("shooting", false);
-        }
-
-        if (Mathf.Abs(moveInput) <= 0.01)
-        {
-            ShootTimeCounter = 0;
-        }
-
-        if (ShootTimeCounter <= 0)
-        {
-            animator.SetBool("runShooting", false);
-        }
-        else
-        {
-            ShootTimeCounter -= Time.deltaTime;
-        }
-
-        // ---- End Animation Controller ----
-
-        // ---- HEALTH Controller ----
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            TakeDamage(20);
-        }
-
-        // ---- End HEALTH Controller ----
     }
-
-    void FixedUpdate()
-    {
-        // -------------------------- Movement by Physics--------------------
-        //moveInput = Input.GetAxis("Horizontal");
-        //rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-        //animator.SetFloat("speed", Math.Abs(moveInput));
-
-        //if (facingRight == false && moveInput > 0)
-        //{
-        //    flipSprite();
-        //}
-        //else if (facingRight == true && moveInput < 0)
-        //{
-        //    flipSprite();
-        //}
-
-        // -------------------------- Movement by Transform
-        moveInput = Input.GetAxis("Horizontal");
-        movement = new Vector3(moveInput, 0f, 0f);
-        transform.position += movement * Time.deltaTime * speed;
-        animator.SetFloat("speed", Mathf.Abs(moveInput));
-
-        if (movement.x < 0 && !faceingright)
-        {
-            flip();
-
-        }
-        else if (movement.x > 0 && faceingright)
-        {
-            flip();
-        }
-
-
-    }
-
-    //void flipSprite() // Alternative function for Flip
-    //{
-    //    facingRight = !facingRight;
-
-    //    Vector3 scaler = transform.localScale;
-    //    scaler.x *= -1;
-    //    transform.localScale = scaler;
-    //}
 
     void flip()
     {
@@ -269,19 +268,98 @@ public class Player_Controller2 : MonoBehaviour
     {
         currentHealth -= damage;
 
-        healthBar.SetHealth(currentHealth);
+        //healthBar.SetHealth(currentHealth);
     }
 
-    public void AttackStart()
+    public void Attack()  //Attacking and chain attacks
     {
-        animator.SetBool("shooting", true);
+        if (state == 0) {
+            if (Input.GetKeyDown(KeyCode.Z) && moveInput == 0)
+            {
+                state = 1;
+                animator.SetBool("shooting", true);      
+            }
+            else if (Input.GetKeyDown(KeyCode.Z) && moveInput != 0)
+            {
+                // ShootTimeCounter = shootTime;
+                state = 2;
+                animator.SetBool("runShooting", true);
+            }
+        }
+        if(state == 1)
+        {
+           
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                ShootTimeCounter = shootTime;
+            }
+           
+        }
+        
+        
+
+        //if (Input.GetKey(KeyCode.Z) && movement.x != 0)
+        //{
+        //    animator.SetBool("shooting", false);
+        //}
+
+        
+
+        //if (Input.GetKeyDown(KeyCode.Z) && animator.GetBool("shooting"))
+        //{
+        //    ShootTimeCounter = shootTime;
+        //    animator.SetBool("shootingLoop", true);
+        //    animator.SetBool("shooting",false);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Z) && animator.GetBool("shootingLoop"))
+        //{
+        //    ShootTimeCounter = shootTime;
+        //    animator.SetBool("shooting", true);
+        //    animator.SetBool("shootingLoop", false);
+            
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.Z))
+        //{
+        //    animator.SetBool("shooting", false);
+        //}
+
+            //if (Mathf.Abs(moveInput) <= 0.01)
+            //{
+            //    ShootTimeCounter = 0;
+            //}
+
+            //if (ShootTimeCounter <= 0)
+            //{
+            //    animator.SetBool("runShooting", false);
+            //}
+            //else
+            //{
+            //    ShootTimeCounter -= Time.deltaTime;
+            //}
+    }
+    public void AttackStart() //Enable Attack Hitbox
+    {
         collider.enabled = true;
     }
 
-    public void AttackFinish()
+    public void AttackFinish() //End Attacks and Disable Hit Box
     {
-        animator.SetBool("shooting", false);
         collider.enabled = false;
+        if (animator.GetBool("runShooting"))
+        {
+            animator.SetBool("runShooting", false);
+            state = 0;
+        }
+
+        if (ShootTimeCounter<= 0)
+        {
+            animator.SetBool("shooting", false);
+            
+            animator.SetBool("shootingLoop", false);
+            ShootTimeCounter = shootTime;
+            state = 0;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
