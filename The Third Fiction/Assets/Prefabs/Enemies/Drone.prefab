@@ -249,6 +249,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   Object: {fileID: 1670166992779077098}
+  Health: 0
+  MaxHealth: 0
+  HealthManager: {fileID: 0}
+  SliderHP: {fileID: 0}
+  ActiveTimer: 0
+  ActiveTimerMAX: 0
 --- !u!1 &1846102053872310384
 GameObject:
   m_ObjectHideFlags: 0

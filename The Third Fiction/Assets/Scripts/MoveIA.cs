@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class MoveIA : MonoBehaviour
 {
+    //Player Variables
     public Vector3 PlayerTarget;
     public Transform DefaultPos;
 
+    //Enemie Variables
     public float Speed;
+
+    //States Machine
     public int State;
 
     // Update is called once per frame
     void Update()
     {
+        //Estado de Ataque >> Perseguir al Jugador
         if(State == 1)
         {
             transform.GetChild(0).position = Vector2.MoveTowards
                 (transform.GetChild(0).position, PlayerTarget, Time.deltaTime * Speed);
             RotateAnim(PlayerTarget);
         }
+        //Estado de Reposo >> Ir a la Posicion Inicial
         else if (State == 0)
         {
             transform.GetChild(0).position = Vector2.MoveTowards
@@ -27,6 +33,7 @@ public class MoveIA : MonoBehaviour
         }
     }
 
+    //Girar Sprite para coincidir con la direccion
     public void RotateAnim(Vector3 Pos)
     {
         PlayerTarget = Pos;
