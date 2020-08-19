@@ -62,6 +62,8 @@ public class Player_Controller : MonoBehaviour
     // ---- Check Point Variables ----
     public Vector3 respawnPoint;
 
+    // ---- Shop & Inventory Variables ----
+    private Inventory inventory;
 
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
@@ -77,6 +79,11 @@ public class Player_Controller : MonoBehaviour
         xpBar.slider.maxValue = xpToNextLevel;
         lvlManager.SetLevel(level);
         hasDoubleJump = false;
+    }
+
+    void Awake()
+    {
+        inventory = new Inventory();
     }
 
     // Update is called once per frame
