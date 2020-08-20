@@ -48,5 +48,9 @@ public class ShootController : MonoBehaviour
                 }
             }
         }
+        if (anim.GetBool("IsDeath"))
+        {
+            State = 2;
+        }
     }
 }

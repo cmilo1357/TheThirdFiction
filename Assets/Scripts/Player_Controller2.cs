@@ -87,6 +87,10 @@ public class Player_Controller2 : MonoBehaviour
                 Attack();
                 ShootTimeCounter -= Time.deltaTime;
                 break;
+            case 2:
+                ShootTimeCounter -= Time.deltaTime;
+                if (ShootTimeCounter <= 0) { state = 0; animator.SetBool("runShooting", false); }              
+                break;
         }
 
         // ---- End JUMP Controller ----
@@ -356,7 +360,7 @@ public class Player_Controller2 : MonoBehaviour
         {
             animator.SetBool("shooting", false);
             
-            animator.SetBool("shootingLoop", false);
+
             ShootTimeCounter = shootTime;
             state = 0;
         }

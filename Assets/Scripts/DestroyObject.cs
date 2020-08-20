@@ -6,11 +6,25 @@ public class DestroyObject : MonoBehaviour
 {
     // Start is called before the first frame update
     public Animator anim;
-    public GameObject Object;
+    private Renderer render;
+    private Collider2D collider;
+    private float numero = 1.5f;
+
 
     void Awake()
     {
         anim = GetComponent<Animator>();
+        render = GetComponent<Renderer>();
+        collider = GetComponent<Collider2D>();
+    }
+
+    public void Update()
+    {
+        if (anim.GetBool("IsDeath"))
+        {
+            numero -= Time.deltaTime;
+            if(numero <= 0) { Destroy(gameObject); }
+        }
     }
 
     void OnTriggerEnter2D(Collider2D hit)
@@ -23,6 +37,7 @@ public class DestroyObject : MonoBehaviour
 
     public void DestroyOnTime()
     {
-        Destroy(Object);
+        render.enabled = false;
+        collider.enabled = false;
     }
 }
