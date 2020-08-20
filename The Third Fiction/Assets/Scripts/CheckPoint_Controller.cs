@@ -29,7 +29,6 @@ public class CheckPoint_Controller : MonoBehaviour
         {
             UpdateCheckPoint();
         }
-
     }
 
     void UpdateCheckPoint()
@@ -37,7 +36,6 @@ public class CheckPoint_Controller : MonoBehaviour
         for (int i = 0; i < lamps.Length; i++)
         {
             lamps[i].GetComponent<SpriteRenderer>().sprite = lampOff;
-
         }
         checkPointRenderer.sprite = lampOn;
         checkPointreached = true;
