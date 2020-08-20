@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player_Controller : MonoBehaviour
 {
     Rigidbody2D rb;
     [SerializeField] Animator animator;
-    
-
 
     // ---- MOVEMENT Variables ----
 
@@ -36,6 +35,8 @@ public class Player_Controller : MonoBehaviour
     public int extraJumpsValue;
     public float secondJumpForce;
 
+    private bool hasDoubleJump;
+
     // ---- DASH Variables ----
 
     [SerializeField] float dashForce;
@@ -51,10 +52,17 @@ public class Player_Controller : MonoBehaviour
     public Health_Bar healthBar;
     [SerializeField] int maxHealth;
     public int currentHealth;
+    public Xp_Bar xpBar;
+    public int xpToNextLevel;
+    public Level_Manager lvlManager;
+    public int level;
 
     // ---- Check Point Variables ----
     public Vector3 respawnPoint;
 
+    // ---- Shop & Inventory Variables ----
+    //private Inventory inventory;
+    //[SerializeField] private UI_Inventory uiInventory;
 
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
@@ -66,6 +74,18 @@ public class Player_Controller : MonoBehaviour
         ShootTimeCounter = shootTime;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        xpBar.slider.maxValue = xpToNextLevel;
+        xpBar.slider.value = 0;
+        lvlManager.SetLevel(level);
+        hasDoubleJump = false;
+
+        
+    }
+
+    void Awake()
+    {
+        //inventory = new Inventory(); //Se instancia el inventario.
+        //uiInventory.SetInventory(inventory); // Se define el inventario para el script UI_Inventory.
     }
 
     // Update is called once per frame
@@ -82,7 +102,7 @@ public class Player_Controller : MonoBehaviour
             rb.velocity = Vector2.up * jumpForce;
 
         }
-        else if (Input.GetButtonDown("Jump") && extraJump > 0) // Aqui se hace el doble salto.
+        else if (Input.GetButtonDown("Jump") && extraJump > 0 && hasDoubleJump == true) // Aqui se hace el doble salto.
         {
             rb.velocity = Vector2.up * secondJumpForce;
             animator.SetBool("jumping", true);
@@ -117,6 +137,11 @@ public class Player_Controller : MonoBehaviour
         else
         {
             animator.SetBool("jumping", true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.O)) // ----> testeo de power up de doble salto.
+        {
+            hasDoubleJump = true;
         }
 
         // ---- End JUMP Controller ----
@@ -198,6 +223,22 @@ public class Player_Controller : MonoBehaviour
         }
 
         // ---- End HEALTH Controller ----
+
+        // ---- XP and Lvl Controller ----
+        if (Input.GetKeyDown(KeyCode.I)) // ----> testeo del sistema de xp y nivel.
+        {
+            gainXp(10);
+        }
+
+        if (xpBar.slider.value >= xpBar.slider.maxValue)
+        {
+            xpBar.slider.value = 0;
+            level++;
+            lvlManager.SetLevel(level);
+        }
+
+
+        // ---- End XP and Lvl Controller ----
     }
 
     void FixedUpdate()
@@ -273,6 +314,11 @@ public class Player_Controller : MonoBehaviour
         healthBar.SetHealth(currentHealth);
     }
 
+    public void gainXp(int gainedXp)
+    {
+        xpBar.xp += gainedXp;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Checkpoint")
@@ -283,6 +329,11 @@ public class Player_Controller : MonoBehaviour
         {
             transform.position = respawnPoint;
             TakeDamage(30);
+        }
+        if (other.tag == "PowerUpJump" )
+        {
+            hasDoubleJump = true;
+            Destroy(other.gameObject);
         }
     }
 

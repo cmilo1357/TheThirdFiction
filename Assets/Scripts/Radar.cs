@@ -5,7 +5,7 @@ using System;
 
 public class Radar : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Dependencia con el Script de Movimiento para Enemigos a Melee
     MoveIA movement;
 
     void Awake()
@@ -13,10 +13,12 @@ public class Radar : MonoBehaviour
         movement = GetComponent<MoveIA>();
     }
 
+    //Deteccion del jugador
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            //Activa la maquina de estados (State 1)
             movement.State = 1;
             movement.PlayerTarget = collision.transform.position;
         }
@@ -26,6 +28,7 @@ public class Radar : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            //Activa la maquina de estados (State 0)
             movement.State = 0;
         }
     }

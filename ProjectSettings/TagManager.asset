@@ -11,6 +11,7 @@ TagManager:
   - Bullet
   - Checkpoint
   - FallHazard
+  - PowerUpJump
   layers:
   - Default
   - TransparentFX
