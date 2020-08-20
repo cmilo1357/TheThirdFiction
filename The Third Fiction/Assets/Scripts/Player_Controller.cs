@@ -61,8 +61,8 @@ public class Player_Controller : MonoBehaviour
     public Vector3 respawnPoint;
 
     // ---- Shop & Inventory Variables ----
-    private Inventory inventory;
-    [SerializeField] private UI_Inventory uiInventory;
+    //private Inventory inventory;
+    //[SerializeField] private UI_Inventory uiInventory;
 
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
@@ -84,8 +84,8 @@ public class Player_Controller : MonoBehaviour
 
     void Awake()
     {
-        inventory = new Inventory(); //Se instancia el inventario.
-        uiInventory.SetInventory(inventory); // Se define el inventario para el script UI_Inventory.
+        //inventory = new Inventory(); //Se instancia el inventario.
+        //uiInventory.SetInventory(inventory); // Se define el inventario para el script UI_Inventory.
     }
 
     // Update is called once per frame
