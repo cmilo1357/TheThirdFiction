@@ -64,6 +64,7 @@ public class Player_Controller : MonoBehaviour
 
     // ---- Shop & Inventory Variables ----
     private Inventory inventory;
+    [SerializeField] private UI_Inventory uiInventory;
 
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
@@ -83,7 +84,8 @@ public class Player_Controller : MonoBehaviour
 
     void Awake()
     {
-        inventory = new Inventory();
+        inventory = new Inventory(); //Se instancia el inventario.
+        uiInventory.SetInventory(inventory); // Se define el inventario para el script UI_Inventory.
     }
 
     // Update is called once per frame
@@ -311,7 +313,7 @@ public class Player_Controller : MonoBehaviour
         healthBar.SetHealth(currentHealth);
     }
 
-    void gainXp(int gainedXp)
+    public void gainXp(int gainedXp)
     {
         currentXp += gainedXp;
 
