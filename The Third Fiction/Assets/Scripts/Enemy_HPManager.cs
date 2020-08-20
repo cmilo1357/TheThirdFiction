@@ -9,7 +9,6 @@ public class Enemy_HPManager : MonoBehaviour
     public Animator anim;
     public Enemy_UIManager Enemy_UI;
     public GameObject Object;
-    Player_Controller player;
     public int Health;
     public int MaxHealth;
 
@@ -18,7 +17,6 @@ public class Enemy_HPManager : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         Enemy_UI = GetComponent<Enemy_UIManager>();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Controller>();
     }
 
     //Activar la animacion cuando la Vida llega a 0
@@ -34,7 +32,6 @@ public class Enemy_HPManager : MonoBehaviour
     //La animacion activa esta funcion en un evento.
     public void DestroyOnTime()
     {
-        player.gainXp(10);
         Destroy(Object);
     }
 
@@ -43,6 +40,4 @@ public class Enemy_HPManager : MonoBehaviour
         Health -= Damage;
         Enemy_UI.HP_Update();
     }
-
-
 }

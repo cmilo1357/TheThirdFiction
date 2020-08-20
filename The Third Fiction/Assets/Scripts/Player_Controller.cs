@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Threading;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player_Controller : MonoBehaviour
 {
     Rigidbody2D rb;
     [SerializeField] Animator animator;
+    
+
 
     // ---- MOVEMENT Variables ----
 
@@ -53,6 +54,7 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] int maxHealth;
     public int currentHealth;
     public Xp_Bar xpBar;
+    public int currentXp;
     public int xpToNextLevel;
     public Level_Manager lvlManager;
     public int level;
@@ -60,9 +62,6 @@ public class Player_Controller : MonoBehaviour
     // ---- Check Point Variables ----
     public Vector3 respawnPoint;
 
-    // ---- Shop & Inventory Variables ----
-    //private Inventory inventory;
-    //[SerializeField] private UI_Inventory uiInventory;
 
     // ----------------------------------------------------------- CODE ---------------------------------------------------------------------
 
@@ -74,18 +73,10 @@ public class Player_Controller : MonoBehaviour
         ShootTimeCounter = shootTime;
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        xpBar.SetXp(currentXp);
         xpBar.slider.maxValue = xpToNextLevel;
-        xpBar.slider.value = 0;
         lvlManager.SetLevel(level);
         hasDoubleJump = false;
-
-        
-    }
-
-    void Awake()
-    {
-        //inventory = new Inventory(); //Se instancia el inventario.
-        //uiInventory.SetInventory(inventory); // Se define el inventario para el script UI_Inventory.
     }
 
     // Update is called once per frame
@@ -225,16 +216,15 @@ public class Player_Controller : MonoBehaviour
         // ---- End HEALTH Controller ----
 
         // ---- XP and Lvl Controller ----
-        if (Input.GetKeyDown(KeyCode.I)) // ----> testeo del sistema de xp y nivel.
+        if (Input.GetKeyDown(KeyCode.I)) // ----> testeo del sitema de xp y nivel.
         {
             gainXp(10);
         }
-
-        if (xpBar.slider.value >= xpBar.slider.maxValue)
+        if (currentXp >= xpToNextLevel)
         {
-            xpBar.slider.value = 0;
             level++;
             lvlManager.SetLevel(level);
+            currentXp -= currentXp + 10;
         }
 
 
@@ -314,9 +304,11 @@ public class Player_Controller : MonoBehaviour
         healthBar.SetHealth(currentHealth);
     }
 
-    public void gainXp(int gainedXp)
+    void gainXp(int gainedXp)
     {
-        xpBar.xp += gainedXp;
+        currentXp += gainedXp;
+
+        xpBar.SetXp(currentXp);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

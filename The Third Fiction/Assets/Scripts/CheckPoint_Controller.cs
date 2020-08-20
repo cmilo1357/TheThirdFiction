@@ -8,13 +8,11 @@ public class CheckPoint_Controller : MonoBehaviour
     public Sprite lampOn;
     private SpriteRenderer checkPointRenderer;
     public bool checkPointreached;
-    GameObject []lamps;
 
     // Start is called before the first frame update
     void Start()
     {
         checkPointRenderer = GetComponent<SpriteRenderer>();
-        lamps = GameObject.FindGameObjectsWithTag("Checkpoint");
     }
 
     // Update is called once per frame
@@ -27,19 +25,9 @@ public class CheckPoint_Controller : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            UpdateCheckPoint();
+            checkPointRenderer.sprite = lampOn;
+            checkPointreached = true;
         }
 
-    }
-
-    void UpdateCheckPoint()
-    {
-        for (int i = 0; i < lamps.Length; i++)
-        {
-            lamps[i].GetComponent<SpriteRenderer>().sprite = lampOff;
-
-        }
-        checkPointRenderer.sprite = lampOn;
-        checkPointreached = true;
     }
 }

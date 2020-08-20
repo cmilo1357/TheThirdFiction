@@ -5,19 +5,13 @@ using UnityEngine.UI;
 
 public class Xp_Bar : MonoBehaviour
 {
+
     public Slider slider;
-    public int xp;
 
-    private void Update()
+    public void SetXp(int xp)
     {
-        if (xp > 0)
-        {
-            slider.value++;
-            xp--;
-        }
+        slider.value = xp;
     }
-
-
 
 
 }
