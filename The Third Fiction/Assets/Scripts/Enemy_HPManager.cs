@@ -19,8 +19,6 @@ public class Enemy_HPManager : MonoBehaviour
         anim = GetComponent<Animator>();
         Enemy_UI = GetComponent<Enemy_UIManager>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Controller>();
-
-        Health = MaxHealth;
     }
 
     //Activar la animacion cuando la Vida llega a 0
